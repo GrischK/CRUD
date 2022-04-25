@@ -1,0 +1,25 @@
+{
+  "name": "39-crud",
+  "version": "1.0.0",
+  "description": "Création CRUD",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrischK/CRUD.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GrischK/CRUD/issues"
+  },
+  "homepage": "https://github.com/GrischK/CRUD#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15"
+  }
+}
