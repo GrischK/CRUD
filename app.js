@@ -1,6 +1,7 @@
 const express = require("express");
 const connection = require("./db-config");
 const app = express();
+app.use(express.json());
 
 const port = process.env.port || 3000;
 
@@ -12,25 +13,9 @@ connection.connect((err) => {
   }
 });
 
-app.use(express.json());
-
 app.listen(port, () => console.log("Express server is running"));
 
-app.get("/bds13", (req, res) => {
-  connection
-    .promise()
-    .query("SELECT * FROM XIII")
-
-    .then(([result]) => {
-      res.json(result);
-    })
-
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error retrieving db");
-    });
-});
-
+// Rechercher une bd par son ID
 app.get("/bds13/:id", (req, res) => {
   const { id } = req.params;
 
@@ -45,6 +30,30 @@ app.get("/bds13/:id", (req, res) => {
     .catch((err) => {
       console.error(err);
       res.status(500).send("Error retrieving db");
+    });
+});
+
+// Faire une recherche personnalisée
+app.get("/bds13", (req, res) => {
+  const { query } = req.query;
+  let sql = "SELECT * FROM XIII";
+  const valuesToEscape = [];
+
+  if (query) {
+    sql += " WHERE Titre LIKE ?";
+    valuesToEscape.push(`%${query}%`);
+  }
+  console.log(query);
+
+  connection
+    .promise()
+    .query(sql, valuesToEscape)
+    .then(([result]) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error retrieving comic");
     });
 });
 
@@ -86,19 +95,21 @@ app.put("/bds13/:id", (req, res) => {
     });
 });
 
-app.delete("/bds13/:id", (req, res)=> {
-  connection.promise().query(`DELETE FROM XIII WHERE id = ?`, [req.params.id])
-  .then(([result])=>{
-    if(result.affectedRows) res.status(204).send(`Comic ${req.params.id} was deleted successfully`);
-    else(res.sendStatus(404));
-  })
+app.delete("/bds13/:id", (req, res) => {
+  connection
+    .promise()
+    .query(`DELETE FROM XIII WHERE id = ?`, [req.params.id])
+    .then(([result]) => {
+      if (result.affectedRows)
+        res.status(204).send(`Comic ${req.params.id} was deleted successfully`);
+      else res.sendStatus(404);
+    })
 
-  .catch((err)=>{
-    console.error(err);
-    res.status(500).send('Error deleting comic')
-  });
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error deleting comic");
+    });
 });
-
 
 // app.post("/bds13", async (req, res)=> {
 //   try{
