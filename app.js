@@ -57,6 +57,7 @@ app.get("/bds13", (req, res) => {
     });
 });
 
+// Ajouter une nouvelle bd
 app.post("/bds13", (req, res) => {
   const { Titre, Tome, Année } = req.body;
 
@@ -78,6 +79,7 @@ app.post("/bds13", (req, res) => {
     });
 });
 
+// Modifier une bd
 app.put("/bds13/:id", (req, res) => {
   const { Titre, Tome, Année } = req.body;
 
@@ -95,6 +97,7 @@ app.put("/bds13/:id", (req, res) => {
     });
 });
 
+// Effacer une bd
 app.delete("/bds13/:id", (req, res) => {
   connection
     .promise()
